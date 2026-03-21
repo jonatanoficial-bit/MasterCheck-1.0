@@ -1,569 +1,174 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Modern Psychoanalytic School – Programa de Formação em Psicanálise Clínica</title>
-    <meta name="description" content="Modern Psychoanalytic School – Programa de Formação em Psicanálise Clínica, com currículo completo, padrão internacional e mais de mil horas de formação." />
-    <link rel="stylesheet" href="styles.css" />
-    <script defer src="scripts.js"></script>
-  </head>
-  <body>
-    <header class="top-bar">
-      <div class="container header-inner">
-        <h1 class="logo">
-          <a href="#inicio" class="logo-link" aria-label="Modern Psychoanalytic School - Programa de Formação em Psicanálise Clínica">
-            <img src="assets/logo_header.png" alt="Modern Psychoanalytic School – Programa de Formação em Psicanálise Clínica" class="logo-img" />
-          </a>
-        </h1>
-        <nav class="main-nav">
-          <a href="#inicio">Início</a>
-          <a href="#estrutura">Estrutura</a>
-          <a href="#modulos">Módulos</a>
-          <a href="#sobre">Sobre</a>
-          <a href="#contato">Contato</a>
-        </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mix Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero">
+      <div class="hero__overlay"></div>
+      <div class="hero__content">
+        <div class="brand-row">
+          <div class="brand-mark">MA</div>
+          <div>
+            <p class="eyebrow">Primeira Build do Projeto</p>
+            <h1>Mix Analyzer</h1>
+          </div>
+        </div>
+        <p class="hero__text">
+          Analisador inteligente de áudio para mix e master com leitura local de arquivos WAV e MP3,
+          visualização, diagnóstico técnico e recomendações automáticas.
+        </p>
+        <div class="hero__actions">
+          <label class="button button--primary upload-button" for="audioFile">Carregar áudio</label>
+          <button id="analyzeBtn" class="button button--secondary" disabled>Analisar agora</button>
+        </div>
+        <div class="build-chip">Build: <span id="buildStamp">2026-03-21 14:56:42</span></div>
       </div>
     </header>
 
-    <section id="inicio" class="hero">
-      <div class="hero-overlay">
-        <h2>Uma jornada completa pela Psicanálise Clínica</h2>
-        <p>
-          Formação premium com padrão internacional, base teórica robusta, aprofundamento clínico,
-          percurso progressivo em 13 módulos e estrutura curricular desenhada para uma escola de alto nível.
-        </p>
-      </div>
-    </section>
+    <main class="dashboard">
+      <section class="panel panel--upload">
+        <div class="panel__header">
+          <div>
+            <p class="panel__eyebrow">Entrada</p>
+            <h2>Arquivo de áudio</h2>
+          </div>
+          <span id="fileStatus" class="status status--idle">Aguardando arquivo</span>
+        </div>
 
-    <section id="estrutura" class="program-pillars">
-      <div class="container pillars-grid">
-        <article class="pillar-card">
-          <span class="pillar-number">Bloco 1</span>
-          <h3>Fundamentos</h3>
-          <p>Módulos 1 a 3. Origem da psicanálise, teoria freudiana, desenvolvimento e relações de objeto.</p>
+        <input id="audioFile" type="file" accept="audio/*,.wav,.mp3" hidden />
+
+        <div class="dropzone" id="dropzone">
+          <div class="dropzone__icon">♪</div>
+          <div>
+            <h3>Arraste seu áudio aqui</h3>
+            <p>Compatível com WAV e MP3. Tudo roda localmente no seu navegador.</p>
+          </div>
+        </div>
+
+        <div class="player-wrap">
+          <audio id="audioPlayer" controls></audio>
+          <div class="file-meta">
+            <div>
+              <span class="meta-label">Arquivo</span>
+              <strong id="fileName">Nenhum arquivo carregado</strong>
+            </div>
+            <div>
+              <span class="meta-label">Duração</span>
+              <strong id="fileDuration">--:--</strong>
+            </div>
+            <div>
+              <span class="meta-label">Canal</span>
+              <strong id="fileChannels">--</strong>
+            </div>
+            <div>
+              <span class="meta-label">Sample rate</span>
+              <strong id="fileRate">--</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid grid--2">
+        <section class="panel">
+          <div class="panel__header">
+            <div>
+              <p class="panel__eyebrow">Visual</p>
+              <h2>Waveform</h2>
+            </div>
+          </div>
+          <canvas id="waveCanvas" width="1200" height="260"></canvas>
+        </section>
+
+        <section class="panel">
+          <div class="panel__header">
+            <div>
+              <p class="panel__eyebrow">Visual</p>
+              <h2>Espectro</h2>
+            </div>
+          </div>
+          <canvas id="spectrumCanvas" width="1200" height="260"></canvas>
+        </section>
+      </section>
+
+      <section class="grid grid--3 stats-grid">
+        <article class="metric-card">
+          <span class="metric-card__label">Peak</span>
+          <strong id="metricPeak">-- dBFS</strong>
+          <small>Pico máximo detectado</small>
         </article>
-        <article class="pillar-card">
-          <span class="pillar-number">Bloco 2</span>
-          <h3>Estrutura Clínica</h3>
-          <p>Módulos 4 a 7. Técnica analítica, psicopatologia, escolas contemporâneas e psicanálise aplicada.</p>
+        <article class="metric-card">
+          <span class="metric-card__label">RMS</span>
+          <strong id="metricRms">-- dBFS</strong>
+          <small>Nível médio de energia</small>
         </article>
-        <article class="pillar-card">
-          <span class="pillar-number">Bloco 3</span>
-          <h3>Especializações</h3>
-          <p>Módulos 8 a 10. Infância e adolescência, psicossomática, neurociências, psiquiatria e psicofarmacologia.</p>
+        <article class="metric-card">
+          <span class="metric-card__label">Crest Factor</span>
+          <strong id="metricCrest">-- dB</strong>
+          <small>Indício de dinâmica / compressão</small>
         </article>
-        <article class="pillar-card">
-          <span class="pillar-number">Bloco 4</span>
-          <h3>Profissionalização</h3>
-          <p>Módulos 11 a 13. Ética, legislação, gestão de carreira, análise pessoal, supervisão e integração clínica.</p>
+        <article class="metric-card">
+          <span class="metric-card__label">Sibilância</span>
+          <strong id="metricSibilance">--</strong>
+          <small>Score estimado entre 5 e 10 kHz</small>
         </article>
-      </div>
-    </section>
-
-    <nav id="modulos" class="module-nav">
-      <ul>
-        <li><a href="#modulo1">Módulo 1</a></li>
-        <li><a href="#modulo2">Módulo 2</a></li>
-        <li><a href="#modulo3">Módulo 3</a></li>
-        <li><a href="#modulo4">Módulo 4</a></li>
-        <li><a href="#modulo5">Módulo 5</a></li>
-        <li><a href="#modulo6">Módulo 6</a></li>
-        <li><a href="#modulo7">Módulo 7</a></li>
-        <li><a href="#modulo8">Módulo 8</a></li>
-        <li><a href="#modulo9">Módulo 9</a></li>
-        <li><a href="#modulo10">Módulo 10</a></li>
-        <li><a href="#modulo11">Módulo 11</a></li>
-        <li><a href="#modulo12">Módulo 12</a></li>
-        <li><a href="#modulo13">Módulo 13</a></li>
-      </ul>
-    </nav>
-
-    <main class="content">
-      <section id="modulo1" class="module">
-        <h2>Módulo 1: História, Fundamentos e Nascimento da Psicanálise (80h)</h2>
-        <p class="module-lead">
-          Este módulo inaugura a formação com uma base histórica, epistemológica e clínica ampla. Seu propósito é permitir que o aluno compreenda a psicanálise não apenas como um conjunto de conceitos, mas como uma ruptura decisiva na forma de pensar o sofrimento humano, a subjetividade, a linguagem e o desejo. Ao final do módulo, o estudante deve ser capaz de explicar a origem da psicanálise, os elementos que a diferenciam de outras abordagens e o sentido histórico de sua consolidação como disciplina clínica e campo de formação.
-        </p>
-
-        <h3>1.1 O cenário europeu do fim do século XIX</h3>
-        <p>
-          A psicanálise nasce em um momento de forte confiança na ciência, na medicina e no progresso técnico. A neurologia e a psiquiatria avançavam, mas ainda encontravam dificuldades para explicar quadros como histeria, angústia difusa, paralisias sem lesão orgânica aparente, compulsões, fobias e sintomas corporais associados ao sofrimento emocional. Nesse contexto, surgia uma questão central: seria possível existir um sofrimento real, intenso e incapacitante que não tivesse origem exclusivamente orgânica?
-        </p>
-        <p>
-          Essa pergunta abriu espaço para uma transformação radical. Em vez de reduzir o paciente ao corpo biológico, Sigmund Freud passou a escutar sua narrativa, seus afetos, suas memórias, suas fantasias e seus conflitos. A clínica começa então a deslocar-se da lesão para o sentido, do corpo mudo para a palavra, do sintoma como erro orgânico para o sintoma como mensagem psíquica. Esse deslocamento é a porta de entrada da psicanálise na história do pensamento ocidental.
-        </p>
-        <div class="image-placeholder" data-number="1" data-prompt="cena vienense do fim do século XIX, consultório elegante, livros, divã, luz quente e atmosfera intelectual"></div>
-
-        <h3>1.2 Charcot, Breuer e a pré-história da psicanálise</h3>
-        <p>
-          Freud estudou com Jean-Martin Charcot, em Paris, onde observou demonstrações clínicas sobre histeria e hipnose. Charcot mostrava que certos sintomas poderiam ser desencadeados ou aliviados por sugestão, o que colocava em crise a ideia de que todo sintoma relevante dependeria de uma causa anatômica localizável. Essa experiência influenciou profundamente Freud e o levou a considerar com mais seriedade a causalidade psíquica.
-        </p>
-        <p>
-          Em seguida, ao lado de Josef Breuer, Freud desenvolveu o método catártico. A ideia era que o paciente pudesse recordar experiências traumáticas e descarregar afetos ligados a elas. O caso de Anna O. tornou-se emblemático porque mostrou o valor terapêutico da fala. Ainda não se tratava da psicanálise em seu formato maduro, mas já surgia ali uma intuição decisiva: o sintoma tem história, guarda relação com a memória e pode ser abordado pela linguagem.
-        </p>
-        <div class="image-placeholder" data-number="2" data-prompt="ambiente clínico histórico com hipnose e observação médica, estilo editorial refinado"></div>
-
-        <h3>1.3 Da hipnose à associação livre</h3>
-        <p>
-          Freud abandona gradualmente a hipnose porque percebe que nem todos os pacientes respondem a ela da mesma maneira e porque o método não permite acompanhar com consistência o funcionamento do psiquismo. Em seu lugar, desenvolve a associação livre: o paciente deve falar tudo o que lhe vier à mente, sem censura, sem organizar excessivamente o discurso e sem buscar parecer coerente o tempo todo.
-        </p>
-        <p>
-          A associação livre inaugura a escuta psicanalítica. Ela mostra que o discurso do paciente contém interrupções, lapsos, repetições, silêncios, mudanças de tema, imagens e detalhes aparentemente banais que podem revelar a lógica do inconsciente. O analista aprende a ouvir não apenas o que o paciente diz, mas como diz, o que evita dizer, o que esquece e o que insiste em retornar.
-        </p>
-        <div class="image-placeholder" data-number="3" data-prompt="fluxo visual da fala saindo da mente do paciente, palavras, memórias e símbolos emergindo em composição sofisticada"></div>
-
-        <h3>1.4 O inconsciente como descoberta central</h3>
-        <p>
-          A noção de inconsciente é a pedra angular da psicanálise. Freud propõe que a mente humana não se esgota na consciência. Há desejos, lembranças, fantasias, identificações e conflitos que permanecem fora do campo consciente, mas continuam ativos, influenciando escolhas, afetos, sintomas e relações. O sujeito não coincide integralmente com aquilo que sabe sobre si mesmo.
-        </p>
-        <p>
-          O inconsciente não é apenas um depósito passivo. Ele opera segundo processos próprios, como condensação, deslocamento, simbolização e repetição. Isso significa que o conteúdo inconsciente não aparece de forma direta; ele retorna disfarçado, por exemplo, nos sonhos, nos chistes, nos atos falhos e nas formações sintomáticas. Com isso, a psicanálise inaugura uma nova antropologia: o ser humano é atravessado por forças que não domina plenamente.
-        </p>
-        <div class="image-placeholder" data-number="4" data-prompt="iceberg mental premium, parte visível pequena e parte submersa profunda, com textura elegante"></div>
-
-        <h3>1.5 A interpretação dos sonhos</h3>
-        <p>
-          Em 1900, Freud publica <em>A Interpretação dos Sonhos</em>, obra considerada o marco inaugural da psicanálise. Nela, o sonho deixa de ser compreendido como ruído mental ou fenômeno sem valor clínico e passa a ser tratado como formação de sentido. Freud afirma que o sonho é a realização deformada de um desejo inconsciente e que sua análise pode revelar conflitos psíquicos centrais.
-        </p>
-        <p>
-          Para entender o sonho, Freud diferencia conteúdo manifesto e conteúdo latente. O conteúdo manifesto é aquilo que o sonhador se lembra e narra; o conteúdo latente corresponde aos pensamentos e desejos inconscientes que deram origem ao sonho. Entre esses dois níveis atua o trabalho do sonho, que transforma o desejo em enigma. Aprender a ler sonhos é aprender a reconhecer a linguagem indireta do inconsciente.
-        </p>
-        <div class="image-placeholder" data-number="5" data-prompt="cena onírica com portas, escadas, relógios, névoa e símbolos psíquicos em estética sofisticada"></div>
-
-        <h3>1.6 Recalque, sintoma e retorno do reprimido</h3>
-        <p>
-          Entre os conceitos fundamentais do nascimento da psicanálise está o recalque. Trata-se do processo pelo qual certas representações, ligadas a desejos, conflitos e afetos intoleráveis, são afastadas da consciência. Contudo, o que é recalcado não desaparece. Pelo contrário: continua operando e retorna por vias indiretas. Esse retorno pode aparecer como sintoma, angústia, ato falho, sonho recorrente, escolha repetitiva ou impasse relacional.
-        </p>
-        <p>
-          O sintoma, portanto, não é apenas algo a ser eliminado. Na ótica psicanalítica, ele é uma formação de compromisso entre o desejo e a defesa. Ele revela que há um conflito em curso e que o sujeito está tentando, ao mesmo tempo, expressar e ocultar algo. A clínica psicanalítica busca escutar o sintoma em sua lógica e não apenas suprimi-lo de forma rápida.
-        </p>
-        <div class="image-placeholder" data-number="6" data-prompt="representação do recalque, conteúdos psíquicos sendo empurrados para o inconsciente e retornando como sintoma"></div>
-
-        <h3>1.7 Primeira tópica: consciente, pré-consciente e inconsciente</h3>
-        <p>
-          Para organizar sua teoria inicial, Freud propõe a primeira tópica do aparelho psíquico. Nela, a mente é descrita por três sistemas. O consciente corresponde ao que está presente na percepção imediata; o pré-consciente reúne conteúdos não presentes no momento, mas acessíveis à lembrança; e o inconsciente abriga conteúdos recalcados, marcados por forte investimento pulsional e não diretamente acessíveis à consciência.
-        </p>
-        <p>
-          Essa distinção é didática e clínica. Ela mostra que a mente possui camadas, níveis de acesso e forças em tensão. O trabalho psicanalítico não se limita a tornar tudo plenamente consciente de modo simples; ele exige elaboração, interpretação e tempo. A primeira tópica oferece ao estudante uma base essencial para compreender o desenvolvimento posterior da teoria freudiana.
-        </p>
-        <div class="image-placeholder" data-number="7" data-prompt="diagrama psíquico com consciente, pré-consciente e inconsciente em linguagem visual elegante"></div>
-
-        <h3>1.8 Sexualidade infantil e escândalo teórico</h3>
-        <p>
-          Um dos pontos mais polêmicos e transformadores da obra de Freud foi a afirmação de que a sexualidade começa na infância. É fundamental entender corretamente esse ponto: Freud não estava sexualizando a infância em termos adultos, mas mostrando que o corpo infantil já é atravessado por zonas de prazer, busca de satisfação e modos de investimento libidinal. A sexualidade, nesse sentido, é mais ampla do que genitalidade.
-        </p>
-        <p>
-          Essa formulação rompeu com a imagem idealizada da infância como estado puro e sem conflito. Ao introduzir a sexualidade infantil, Freud mostrou que o sujeito humano se constitui desde cedo em torno do desejo, da relação com o corpo, da dependência do outro e da necessidade de simbolizar experiências prazerosas e frustrantes. Sem essa base, não é possível compreender a teoria das fases psicossexuais, o Édipo e a constituição da subjetividade.
-        </p>
-        <div class="image-placeholder" data-number="8" data-prompt="linha visual do desenvolvimento infantil com símbolos de oralidade, controle, descoberta e maturação psíquica"></div>
-
-        <h3>1.9 Complexo de Édipo e constituição do sujeito</h3>
-        <p>
-          O complexo de Édipo ocupa posição estruturante na teoria freudiana. Ele expressa a entrada da criança no campo do desejo, da interdição, da rivalidade, da identificação e da lei simbólica. Não se trata apenas de uma narrativa familiar literal, mas de uma estrutura teórica para pensar como a criança se organiza diante do amor, da frustração, da diferença e dos limites impostos pela convivência humana.
-        </p>
-        <p>
-          Por meio do Édipo, a criança internaliza proibições, constrói ideais, organiza identificações e passa a se orientar em relação ao desejo do outro. Essa passagem terá papel decisivo na formação do superego, no modo como o sujeito lida com culpa e idealização e na maneira como se insere no mundo simbólico. Entender o Édipo é entender como a psicanálise pensa a passagem da natureza pulsional à cultura.
-        </p>
-        <div class="image-placeholder" data-number="9" data-prompt="composição simbólica da família, lei, desejo e separação em estética abstrata sofisticada"></div>
-
-        <h3>1.10 Fundação da IPA e institucionalização</h3>
-        <p>
-          À medida que a psicanálise se expandia, tornou-se necessário organizar sua transmissão. Em 1910 foi criada a Associação Psicanalítica Internacional, marco decisivo para a institucionalização do campo. Com ela, formaram-se sociedades, institutos, critérios de formação e padrões de supervisão e análise pessoal. A psicanálise deixou de ser apenas a obra de um autor e passou a constituir uma tradição internacional organizada.
-        </p>
-        <p>
-          Esse aspecto é decisivo para qualquer curso sério. A formação psicanalítica de padrão elevado nunca se reduziu a leitura superficial. Ela envolve estudo progressivo, análise pessoal, supervisão, discussão clínica e inserção em comunidade formativa. Por isso, a história da psicanálise é também a história de sua transmissão.
-        </p>
-        <div class="image-placeholder" data-number="10" data-prompt="mapa internacional da expansão da psicanálise com Viena, Londres, Paris, Nova York e América Latina"></div>
-
-        <h3>1.11 Psicanálise no Brasil</h3>
-        <p>
-          A recepção da psicanálise no Brasil ocorreu ao longo das primeiras décadas do século XX, por meio de médicos, psiquiatras, intelectuais, tradutores e educadores. Com o passar do tempo, surgiram grupos de estudo, sociedades filiadas, institutos e uma tradição viva de produção clínica e teórica. A psicanálise brasileira construiu relevância não apenas no consultório, mas também na universidade, na cultura e nos debates sociais.
-        </p>
-        <p>
-          Entender essa trajetória ajuda o aluno a reconhecer que a psicanálise não é um corpo teórico importado de forma estática. Ela foi recebida, reinterpretada e reelaborada em diálogo com a realidade brasileira. Isso reforça a importância de uma formação que una rigor conceitual e sensibilidade cultural.
-        </p>
-        <div class="image-placeholder" data-number="11" data-prompt="mapa do Brasil com polos psicanalíticos, bibliotecas, institutos e atmosfera acadêmica premium"></div>
-
-        <h3>1.12 Ética da escuta e nascimento de uma nova clínica</h3>
-        <p>
-          A psicanálise institui uma ética singular da escuta. O analista não ocupa o lugar de quem corrige moralmente o paciente, nem reduz seu sofrimento a conselhos rápidos. Ele sustenta um espaço em que a palavra do sujeito possa produzir verdade sobre si mesma. Essa escuta exige atenção, neutralidade técnica, manejo da transferência e respeito pela singularidade do caso.
-        </p>
-        <p>
-          Por isso, a clínica psicanalítica é ao mesmo tempo teoria, método e ética. Ela trata o sofrimento sem apagar a complexidade do sujeito. Escutar em psicanálise é reconhecer que por trás do sintoma existe uma história, um desejo, uma defesa, um conflito e uma forma própria de gozo e sofrimento. Essa perspectiva inaugura uma clínica moderna da subjetividade.
-        </p>
-        <div class="image-placeholder" data-number="12" data-prompt="consultório psicanalítico sofisticado, divã, poltrona, biblioteca e atmosfera serena de escuta profunda"></div>
-
-        <h3>1.13 Resultados formativos esperados</h3>
-        <ul>
-          <li>Explicar o contexto histórico de surgimento da psicanálise.</li>
-          <li>Diferenciar hipnose, catarse, associação livre e método psicanalítico.</li>
-          <li>Definir inconsciente, recalque, sintoma, sonho e primeira tópica com clareza técnica.</li>
-          <li>Compreender a relevância da sexualidade infantil, do Édipo e da institucionalização da formação.</li>
-          <li>Reconhecer a importância histórica e clínica da psicanálise no Brasil e no mundo.</li>
-        </ul>
+        <article class="metric-card">
+          <span class="metric-card__label">Estéreo</span>
+          <strong id="metricStereo">--</strong>
+          <small>Largura e correlação básica</small>
+        </article>
+        <article class="metric-card">
+          <span class="metric-card__label">Diagnóstico</span>
+          <strong id="metricHealth">Aguardando</strong>
+          <small>Resumo automático do arquivo</small>
+        </article>
       </section>
 
-      <section id="modulo2" class="module">
-        <h2>Módulo 2: Teoria Freudiana e Metapsicologia (100h)</h2>
-        <p class="module-lead">
-          Este módulo aprofunda a arquitetura conceitual da teoria freudiana. O aluno estudará a organização do aparelho psíquico, a dinâmica do conflito, a economia das pulsões, o papel do ego, as formações do inconsciente e os mecanismos de defesa. O objetivo é sair do nível introdutório e entrar em uma compreensão realmente formativa da metapsicologia.
-        </p>
-        <h3>2.1 O que é metapsicologia</h3>
-        <p>
-          Freud utiliza o termo metapsicologia para designar uma forma de descrição do psiquismo que ultrapassa a observação imediata. Ela busca explicar os fenômenos psíquicos por diferentes perspectivas: dinâmica, econômica e tópica. A perspectiva dinâmica pensa o conflito entre forças; a econômica considera quantidades de energia e investimento; e a tópica organiza as instâncias ou sistemas do aparelho psíquico.
-        </p>
-        <p>
-          Estudar metapsicologia é aprender a pensar a clínica em profundidade. Em vez de descrever apenas comportamentos, o analista busca compreender quais forças atuam, quais desejos estão em jogo, quais defesas se formam e como o sujeito lida com tensão, prazer, realidade, culpa e repetição.
-        </p>
-        <div class="image-placeholder" data-number="13" data-prompt="diagrama refinado da metapsicologia com tópica, dinâmica e economia psíquica"></div>
+      <section class="grid grid--2">
+        <section class="panel">
+          <div class="panel__header">
+            <div>
+              <p class="panel__eyebrow">Diagnóstico</p>
+              <h2>Problemas detectados</h2>
+            </div>
+          </div>
+          <div id="issuesList" class="issues-list empty-state">
+            Carregue um arquivo e clique em <strong>Analisar agora</strong>.
+          </div>
+        </section>
 
-        <h3>2.2 Primeira e segunda tópica</h3>
-        <p>
-          Na primeira tópica, Freud distingue consciente, pré-consciente e inconsciente. Mais tarde, percebe que essa formulação precisava ser complementada e apresenta a segunda tópica: id, ego e superego. O id é o reservatório pulsional; o ego, mediador entre pulsão, realidade e exigências internas; o superego, instância de crítica, idealização e proibição. Essas duas formulações não se excluem; elas se iluminam mutuamente.
-        </p>
-        <p>
-          A segunda tópica permite entender por que o conflito psíquico é estrutural. O ego não governa soberanamente a mente. Ele precisa negociar com impulsos do id, com limites da realidade e com exigências do superego. Muitas formas de sofrimento surgem justamente dessa tensão entre desejo, defesa, proibição e adaptação ao mundo externo.
-        </p>
-        <div class="image-placeholder" data-number="14" data-prompt="id, ego e superego em diagrama premium, com equilíbrio entre desejo, realidade e moral"></div>
-
-        <h3>2.3 Princípio do prazer e princípio da realidade</h3>
-        <p>
-          O princípio do prazer tende à descarga de tensão e à busca de satisfação. O princípio da realidade introduz adiamento, mediação, cálculo e renúncia parcial em nome da adaptação ao mundo. O ego se organiza justamente na passagem entre esses dois princípios. Essa tensão explica a dificuldade humana de conciliar desejo imediato, exigência cultural e vida prática.
-        </p>
-        <p>
-          Em clínica, isso ajuda a compreender impulsividade, frustração, compulsões, idealizações e sintomas ligados a falhas de mediação entre desejo e realidade. O aluno aprende a reconhecer que sofrimento psíquico não é mera falta de autocontrole, mas expressão de conflitos estruturais no aparelho psíquico.
-        </p>
-        <div class="image-placeholder" data-number="15" data-prompt="ilustração conceitual do princípio do prazer versus princípio da realidade"></div>
-
-        <h3>2.4 Teoria das pulsões</h3>
-        <p>
-          A pulsão é um conceito-limite entre o corpo e o psiquismo. Ela representa uma pressão constante que exige trabalho do aparelho psíquico. Freud descreve fonte, finalidade, pressão e objeto da pulsão. Mais tarde, reorganiza sua teoria em torno das pulsões de vida e de morte. As pulsões de vida tendem à ligação, à conservação e à complexificação; as pulsões de morte apontam para desligamento, repetição destrutiva, agressividade e retorno a estados de menor tensão.
-        </p>
-        <p>
-          Essa formulação é indispensável para pensar repetição traumática, sabotagem subjetiva, agressividade, autodestruição e determinados impasses relacionais. O analista não vê apenas escolhas conscientes; ele considera também tendências profundas que podem conduzir o sujeito a reviver cenas dolorosas e a insistir em padrões que o fazem sofrer.
-        </p>
-        <div class="image-placeholder" data-number="16" data-prompt="composição abstrata de Eros e Tânatos, ligação e ruptura, vida e morte em linguagem visual elegante"></div>
-
-        <h3>2.5 Ego, defesas e compromisso sintomático</h3>
-        <p>
-          O ego é frequentemente compreendido de forma simplificada como centro consciente da personalidade. Em psicanálise, porém, ele é bem mais complexo. O ego possui partes conscientes e inconscientes, forma-se na relação com o outro e procura manter certo equilíbrio entre desejo, moral e realidade. Para isso, utiliza mecanismos de defesa.
-        </p>
-        <p>
-          Entre os principais mecanismos estudados neste módulo estão recalque, negação, projeção, deslocamento, racionalização, formação reativa, regressão, intelectualização e sublimação. Nenhum deles é, por si só, simplesmente “bom” ou “mau”. Eles podem proteger o sujeito em determinados momentos, mas também rigidificar o funcionamento psíquico quando se tornam dominantes. A leitura clínica exige reconhecer quando a defesa organiza a personalidade e quando a empobrece.
-        </p>
-        <div class="image-placeholder" data-number="17" data-prompt="representação visual dos mecanismos de defesa com espelhos, máscaras e setas de deslocamento"></div>
-
-        <h3>2.6 Formação do superego e culpa</h3>
-        <p>
-          O superego é herdeiro das identificações parentais, do complexo de Édipo e da internalização de normas e ideais. Ele não age apenas como proibição externa interiorizada. Pode tornar-se severo, cruel, idealizante e fonte importante de culpa. Em muitos quadros clínicos, o sofrimento decorre não apenas do desejo recalcado, mas de uma relação extremamente exigente com o ideal.
-        </p>
-        <p>
-          O estudo do superego permite compreender perfeccionismo, autocrítica excessiva, vergonha intensa, sensação crônica de inadequação e formas de sofrimento em que o sujeito nunca se sente à altura do que acredita que deveria ser. Trata-se de um tema crucial para a prática clínica contemporânea.
-        </p>
-        <div class="image-placeholder" data-number="18" data-prompt="figura simbólica do superego como instância moral, julgamento, ideal e culpa"></div>
-
-        <h3>2.7 Sexualidade infantil e fases psicossexuais</h3>
-        <p>
-          Freud descreve o desenvolvimento da libido por fases: oral, anal, fálica, latência e genital. Cada fase marca uma organização do prazer, do vínculo com o corpo e da relação com o outro. O desenvolvimento não é linear e perfeito; ele pode deixar fixações, regressões e marcas estruturais que terão impacto posterior na vida adulta.
-        </p>
-        <p>
-          O estudo das fases psicossexuais não serve para classificar pessoas de modo simplista, mas para compreender modos de relação, conflitos de autonomia, dependência, controle, exibicionismo, vergonha, rivalidade e erotização. Nesse ponto, a metapsicologia se liga diretamente à clínica da personalidade.
-        </p>
-        <div class="image-placeholder" data-number="19" data-prompt="sequência visual elegante das fases oral, anal, fálica, latência e genital"></div>
-
-        <h3>2.8 Angústia, sintoma e repetição</h3>
-        <p>
-          A angústia ocupa lugar central na teoria freudiana. Ela sinaliza perigo psíquico e mobiliza defesas. Em muitos casos, o sintoma surge como tentativa de administrar a angústia. Já a repetição mostra que o sujeito nem sempre caminha em direção ao prazer; ele pode também repetir o que lhe é doloroso. Essa observação levou Freud a reformular sua teoria e a pensar o papel da compulsão à repetição.
-        </p>
-        <p>
-          No trabalho clínico, compreender a lógica da repetição é essencial. O paciente frequentemente retorna às mesmas relações, aos mesmos impasses e às mesmas soluções fracassadas. O papel do analista não é simplesmente recomendar mudanças, mas ajudar o sujeito a reconhecer a cena que insiste e o lugar que ocupa nela.
-        </p>
-        <div class="image-placeholder" data-number="20" data-prompt="espiral de repetição psíquica com padrões retornando em estética premium"></div>
-
-        <h3>2.9 Competências esperadas</h3>
-        <ul>
-          <li>Dominar a distinção entre primeira e segunda tópica.</li>
-          <li>Explicar a teoria das pulsões e a diferença entre prazer e realidade.</li>
-          <li>Reconhecer os principais mecanismos de defesa e seus usos clínicos.</li>
-          <li>Relacionar superego, culpa, idealização e sofrimento subjetivo.</li>
-          <li>Articular sexualidade infantil, angústia, repetição e sintoma.</li>
-        </ul>
+        <section class="panel">
+          <div class="panel__header">
+            <div>
+              <p class="panel__eyebrow">Relatório</p>
+              <h2>Resumo inteligente</h2>
+            </div>
+          </div>
+          <div id="summaryText" class="summary-box empty-state">
+            O relatório completo será gerado automaticamente após a análise.
+          </div>
+        </section>
       </section>
 
-      <section id="modulo3" class="module">
-        <h2>Módulo 3: Desenvolvimento e Teorias das Relações de Objeto (80h)</h2>
-        <p class="module-lead">Neste módulo, o estudante amplia sua visão para os autores pós-freudianos que enfatizaram o desenvolvimento emocional primitivo, o vínculo com o objeto e a constituição do self. O foco é compreender como as primeiras relações moldam o psiquismo.</p>
-        <h3>3.1 Da pulsão ao vínculo</h3>
-        <p>As teorias das relações de objeto deslocam o foco exclusivo da pulsão para o modo como o sujeito se constitui nas primeiras relações com cuidadores e objetos internos. O bebê não é pensado apenas como organismo que busca descarga, mas como ser em relação.</p>
-        <div class="image-placeholder" data-number="21" data-prompt="mãe e bebê em composição abstrata de vínculo, holding e cuidado"></div>
-        <h3>3.2 Melanie Klein</h3>
-        <p>Klein enfatiza fantasias inconscientes precoces, posições esquizoparanóide e depressiva, ansiedade persecutória, inveja, reparação e mundo interno povoado por objetos bons e maus. Sua leitura transforma a clínica infantil e amplia a compreensão da agressividade primitiva.</p>
-        <h3>3.3 Winnicott</h3>
-        <p>Winnicott introduz conceitos como holding, ambiente suficientemente bom, verdadeiro self, falso self, objeto transicional e espaço potencial. Seu pensamento é fundamental para compreender falhas ambientais, criatividade e amadurecimento emocional.</p>
-        <div class="image-placeholder" data-number="22" data-prompt="objeto transicional em ambiente acolhedor, estética clínica elegante"></div>
-        <h3>3.4 Bowlby e apego</h3>
-        <p>A teoria do apego mostra como padrões iniciais de vínculo influenciam segurança emocional, regulação afetiva e formas de relação ao longo da vida. Embora dialogue com outras tradições, sua integração ao pensamento psicanalítico ampliou a compreensão do desenvolvimento.</p>
-        <ul>
-          <li>Posições kleinianas e mundo interno.</li>
-          <li>Holding, manejo e amadurecimento emocional.</li>
-          <li>Apego, separação e segurança afetiva.</li>
-          <li>Clínica do desenvolvimento e falhas ambientais.</li>
-        </ul>
-      </section>
-
-      <section id="modulo4" class="module">
-        <h2>Módulo 4: Técnicas de Interpretação e Manejo Clínico (100h)</h2>
-        <p class="module-lead">Este módulo apresenta a técnica psicanalítica em profundidade. O estudante aprenderá como se organiza o setting, como se desenvolve a escuta analítica e quais são os princípios de manejo da transferência, da resistência e da interpretação.</p>
-        <h3>4.1 Setting e enquadre</h3>
-        <p>O setting psicanalítico inclui regularidade, frequência, sigilo, pagamento, tempo de sessão, manejo de faltas e sustentação do enquadre. O enquadre não é detalhe burocrático: ele cria as condições para o trabalho transferencial e para a emergência do material inconsciente.</p>
-        <div class="image-placeholder" data-number="23" data-prompt="consultório psicanalítico premium com divã, poltrona, relógio discreto e biblioteca"></div>
-        <h3>4.2 Associação livre e atenção flutuante</h3>
-        <p>Enquanto o paciente associa livremente, o analista sustenta atenção flutuante, evitando selecionar previamente o que parece mais importante. Esse par técnico abre espaço para o surgimento do inesperado, do deslocamento e da lógica do inconsciente.</p>
-        <h3>4.3 Transferência e contratransferência</h3>
-        <p>A transferência é a atualização de vínculos, expectativas e fantasias inconscientes na relação com o analista. A contratransferência envolve as respostas emocionais do analista diante do paciente e precisa ser reconhecida e trabalhada tecnicamente.</p>
-        <div class="image-placeholder" data-number="24" data-prompt="duas figuras em diálogo simbólico com fios psíquicos representando transferência e contratransferência"></div>
-        <h3>4.4 Interpretação e timing clínico</h3>
-        <p>Interpretar não é explicar demais, nem demonstrar erudição. A interpretação eficaz depende do momento, da economia do caso, do nível de simbolização do paciente e do grau de elaboração possível. O aluno aprenderá a diferença entre escutar, pontuar, confrontar e interpretar.</p>
-        <ul>
-          <li>Função do setting e enquadre.</li>
-          <li>Transferência, resistência e repetição na sessão.</li>
-          <li>Construção de interpretação.</li>
-          <li>Ética e posição do analista.</li>
-        </ul>
-      </section>
-
-      <section id="modulo5" class="module">
-        <h2>Módulo 5: Psicopatologia Psicanalítica (80h)</h2>
-        <p class="module-lead">O objetivo deste módulo é oferecer ao aluno uma leitura psicopatológica fundamentada na psicanálise, articulando estrutura, conflito, defesa, fantasia e modo de relação com o outro.</p>
-        <h3>5.1 Neurose</h3>
-        <p>Na neurose, o conflito psíquico organiza-se em torno do recalque, da angústia e do retorno do reprimido. Fobias, obsessões, conversões e sintomas histéricos são estudados em sua lógica específica.</p>
-        <h3>5.2 Psicose</h3>
-        <p>Na psicose, estão em jogo falhas mais radicais na simbolização, no teste de realidade e na relação com o Outro. O módulo introduz diferenciações clínicas importantes sem reduzir o paciente a rótulos diagnósticos simplistas.</p>
-        <div class="image-placeholder" data-number="25" data-prompt="máscaras e fragmentações simbólicas para representar diferentes organizações psicopatológicas"></div>
-        <h3>5.3 Estados-limite e sofrimento contemporâneo</h3>
-        <p>Serão discutidos vazio, impulsividade, instabilidade relacional, desregulação afetiva, atuações, dependência e sofrimento narcísico, com atenção ao cenário clínico contemporâneo.</p>
-        <ul>
-          <li>Neurose: histeria, obsessão e fobia.</li>
-          <li>Psicose e falhas de simbolização.</li>
-          <li>Estados-limite e clínica do vazio.</li>
-          <li>Leitura estrutural e manejo clínico inicial.</li>
-        </ul>
-      </section>
-
-      <section id="modulo6" class="module">
-        <h2>Módulo 6: Escolas Psicanalíticas Contemporâneas (80h)</h2>
-        <p class="module-lead">Aqui o estudante entra em contato com os grandes desdobramentos da tradição freudiana. O foco é mapear continuidades, rupturas e contribuições de diferentes escolas para a clínica atual.</p>
-        <h3>6.1 Psicologia do ego</h3>
-        <p>A psicologia do ego desenvolveu a análise das funções egóicas, adaptação, defesa e conflitos intrapsíquicos, ampliando a leitura do funcionamento do eu.</p>
-        <h3>6.2 Lacan</h3>
-        <p>Lacan recoloca Freud a partir da linguagem, do significante, do inconsciente estruturado como linguagem, do estádio do espelho e da tríade Real, Simbólico e Imaginário. Sua contribuição é decisiva para a clínica da falta e do desejo.</p>
-        <div class="image-placeholder" data-number="26" data-prompt="composição abstrata com linguagem, espelho, labirinto e signos lacanianos"></div>
-        <h3>6.3 Jung e tradição analítica</h3>
-        <p>Embora tenha seguido outro caminho, Jung permanece importante como contraponto histórico e conceitual, especialmente pelos conceitos de arquétipo, inconsciente coletivo e individuação.</p>
-        <h3>6.4 Relacional, intersubjetiva e self psychology</h3>
-        <p>Essas escolas enfatizam o encontro entre sujeitos, a importância da empatia, a co-construção do campo clínico e as falhas no desenvolvimento do self.</p>
-        <ul>
-          <li>Freud e seus desdobramentos.</li>
-          <li>Escola lacaniana.</li>
-          <li>Escolas relacionais e intersubjetivas.</li>
-          <li>Diálogos e divergências entre abordagens.</li>
-        </ul>
-      </section>
-
-      <section id="modulo7" class="module">
-        <h2>Módulo 7: Psicanálise Aplicada e Interdisciplinaridade (80h)</h2>
-        <p class="module-lead">Este módulo amplia o campo de visão do estudante e demonstra que a psicanálise é, ao mesmo tempo, clínica, teoria da cultura e método de leitura da subjetividade em contextos diversos. O objetivo não é transformar a psicanálise em uma ferramenta genérica para comentar qualquer assunto, mas ensinar como seus conceitos podem ser aplicados com rigor à arte, à literatura, ao cinema, à educação, à religião, aos fenômenos sociais e às formas contemporâneas de sofrimento. Ao final, o aluno deverá compreender o que significa aplicar a psicanálise fora do setting clássico sem perder densidade conceitual, prudência interpretativa e responsabilidade ética.</p>
-
-        <h3>7.1 O que é psicanálise aplicada</h3>
-        <p>Fala-se em psicanálise aplicada quando conceitos, métodos de leitura e hipóteses clínicas oriundos da tradição psicanalítica são utilizados para interpretar produções simbólicas, fenômenos culturais, instituições, narrativas e formas de laço social. Desde Freud, esse movimento já estava presente. Obras como <em>Totem e Tabu</em>, <em>O Futuro de uma Ilusão</em>, <em>Psicologia das Massas e Análise do Eu</em>, <em>Mal-Estar na Civilização</em> e os estudos sobre Leonardo da Vinci mostram que a psicanálise jamais esteve restrita à clínica individual.</p>
-        <p>Contudo, a aplicação exige método. Não se trata de reduzir a arte a um diagnóstico, nem de transformar qualquer personagem em “caso clínico” de modo simplista. A leitura psicanalítica séria busca reconhecer formações do desejo, da fantasia, do recalque, da identificação, da culpa, da repetição, da idealização e da sublimação em manifestações culturais complexas. O bom uso da psicanálise aplicada amplia o olhar; o mau uso empobrece tanto a obra quanto a teoria.</p>
-        <div class="image-placeholder" data-number="27" data-prompt="colagem premium com livros, cinema, pintura, arquitetura mental e símbolos do inconsciente"></div>
-
-        <h3>7.2 Método interpretativo: entre leitura e redução</h3>
-        <p>Um dos grandes desafios deste módulo é ensinar o aluno a interpretar sem cair em reducionismo. A psicanálise aplicada não deve funcionar como uma chave mágica capaz de resolver automaticamente o sentido de uma obra ou de um fenômeno social. Ela opera melhor quando mantém tensão entre texto, contexto, forma, linguagem, sintoma e estrutura. Em vez de perguntar apenas “o que isso quer dizer?”, o estudante aprende a perguntar “como isso foi construído?”, “que conflito reaparece aqui?”, “qual desejo ou qual defesa organiza essa narrativa?” e “que tipo de gozo, ideal ou angústia está em jogo?”.</p>
-        <p>Essa postura é especialmente importante em contextos acadêmicos, culturais e institucionais. O módulo mostrará como construir hipóteses psicanalíticas sem forçar encaixes e como diferenciar interpretação legítima de mera opinião subjetiva. Serão trabalhados os limites da inferência, a importância da leitura cuidadosa e o valor da prudência ao articular autor, obra, personagem e contexto histórico.</p>
-        <div class="image-placeholder" data-number="28" data-prompt="mesa de estudo com livro aberto, anotações, filme em tela e esquemas interpretativos refinados"></div>
-
-        <h3>7.3 Psicanálise e literatura</h3>
-        <p>A literatura oferece um terreno privilegiado para a psicanálise porque nela o sujeito aparece em forma de linguagem, metáfora, deslocamento, repetição, silêncio, ambiguidade e construção narrativa. O romance, o conto, a poesia e o teatro podem revelar conflitos entre desejo e lei, ambivalências afetivas, fantasias inconscientes, luto, melancolia, rivalidade, erotização e culpa.</p>
-        <p>Neste segmento, o aluno estudará como ler personagens, narradores, enredos e estruturas simbólicas sem reduzir a obra ao psiquismo do autor. Serão abordados conceitos como fantasia, identificação, ideal do eu, narcisismo, pulsão, repetição e sublimação, aplicados à análise de textos literários clássicos e contemporâneos. A leitura psicanalítica da literatura ensina também a escutar a clínica, porque desenvolve sensibilidade para nuances do discurso, lacunas significativas, metáforas insistentes e cenas que condensam conflitos.</p>
-        <div class="image-placeholder" data-number="29" data-prompt="biblioteca elegante com romance aberto, páginas em movimento e símbolos psicanalíticos discretos"></div>
-
-        <h3>7.4 Psicanálise e cinema</h3>
-        <p>O cinema é uma linguagem altamente compatível com a investigação psicanalítica porque trabalha com imagem, montagem, identificação, desejo de ver, suspense, repetição, fantasia e posições subjetivas. A experiência cinematográfica mobiliza o espectador, convoca investimento libidinal e reencena temas fundamentais como perda, trauma, idealização, violência, sexualidade, culpa e reconstrução da memória.</p>
-        <p>Neste tópico, o estudante aprenderá a analisar filmes e personagens a partir de categorias como narcisismo, trauma, compulsão à repetição, estruturas clínicas, mecanismos de defesa e função da fantasia. Também serão discutidos cuidados metodológicos: personagem não é pessoa real, obra não é prontuário, e a análise de um filme não deve ignorar enquadramento, som, ritmo, fotografia, narrativa e contexto cultural. Uma leitura premium e internacional de psicanálise aplicada precisa unir sensibilidade estética e rigor conceitual.</p>
-        <div class="image-placeholder" data-number="30" data-prompt="sala de cinema sofisticada com fotogramas, olho simbólico, espelho e elementos do inconsciente"></div>
-
-        <h3>7.5 Arte, criação e sublimação</h3>
-        <p>A arte ocupa posição central na tradição psicanalítica porque permite pensar como o sujeito transforma conflito em forma, sofrimento em elaboração e excesso pulsional em criação. A noção de sublimação é essencial aqui: parte da energia psíquica pode ser desviada de metas imediatas e encontrar expressão em atividades valorizadas culturalmente, como pintura, música, escrita, dança, escultura, performance e invenção estética.</p>
-        <p>O módulo examina ainda a complexidade dessa ideia. Sublimação não é simples “canalização positiva”, nem garantia de saúde mental. Muitas vezes, a obra é atravessada por angústia, ruptura, melancolia, excesso e tentativa de simbolização do irrepresentável. O aluno aprenderá a reconhecer o valor clínico e cultural da criação artística, bem como os riscos de romantizar o sofrimento psíquico como se toda dor produzisse arte ou toda arte resolvesse conflitos.</p>
-        <div class="image-placeholder" data-number="31" data-prompt="ateliê artístico premium com pincéis, tela abstrata e atmosfera de sublimação"></div>
-
-        <h3>7.6 Educação, infância e transmissão</h3>
-        <p>A psicanálise tem muito a contribuir para o campo educacional, especialmente quando se trata de pensar autoridade, desejo de saber, idealização do professor, lugar da lei, formação subjetiva e sofrimento escolar. Freud já advertia que educar, governar e analisar são profissões impossíveis no sentido de que nelas nunca há controle absoluto dos efeitos. Ensinar não é programar subjetividades; é lidar com o imprevisível da relação com o outro.</p>
-        <p>Nesta unidade, o aluno estudará como a linguagem do ambiente escolar participa da constituição subjetiva, como sintomas podem aparecer em dificuldades de aprendizagem, inibição, agressividade, retraimento e excesso de desempenho, e por que uma leitura psicanalítica da educação deve evitar tanto patologização apressada quanto idealizações pedagógicas. Serão trabalhados temas como transferência na relação professor-aluno, função simbólica da autoridade, frustração, limites, desejo e mal-estar nas instituições educativas.</p>
-        <div class="image-placeholder" data-number="32" data-prompt="ambiente escolar refinado com quadro, livros, criança pensando e atmosfera simbólica de transmissão"></div>
-
-        <h3>7.7 Religião, ideal, culpa e ilusão</h3>
-        <p>A religião foi um dos grandes temas de Freud, que a pensou como formação cultural ligada à proteção contra desamparo, à organização da culpa e à sustentação de ideais coletivos. Em <em>O Futuro de uma Ilusão</em> e em outros textos, ele investiga como crenças, rituais e sistemas simbólicos podem operar tanto como contenção do mal-estar quanto como fonte de submissão, repressão e idealização.</p>
-        <p>O estudo deste tópico não pretende ridicularizar a experiência religiosa nem reduzi-la a patologia. O propósito é oferecer instrumentos para compreender como o sujeito se relaciona com transcendência, autoridade, culpa, desejo de proteção, lei e comunidade. O aluno aprenderá a diferenciar leitura crítica de desqualificação simplista, bem como a reconhecer que religião, espiritualidade e experiência simbólica podem ter funções diversas em diferentes estruturas subjetivas.</p>
-        <div class="image-placeholder" data-number="33" data-prompt="arquitetura sagrada com luz simbólica, culpa, ideal e silêncio em estética sofisticada"></div>
-
-        <h3>7.8 Cultura, civilização e mal-estar</h3>
-        <p>A psicanálise aplicada à cultura permite compreender por que o progresso social não elimina o sofrimento humano. Em <em>Mal-Estar na Civilização</em>, Freud mostra que a vida coletiva exige renúncia pulsional, regulação da agressividade e submissão parcial a normas, produzindo tensão contínua entre desejo e cultura. A civilização oferece proteção, mas também impõe perdas, frustrações e culpa.</p>
-        <p>Este eixo do módulo examina como os sintomas contemporâneos podem ser lidos em relação ao ideal de desempenho, ao narcisismo social, à aceleração do tempo, à hiperexposição, ao consumo e à fragilidade dos vínculos. O estudante será convidado a pensar a psicanálise não como nostalgia do passado, mas como instrumento crítico para ler sofrimento atual: burnout, vazio, desamparo, compulsões, isolamento, dependência de validação e formas novas de laço social mediadas por tecnologia.</p>
-        <div class="image-placeholder" data-number="34" data-prompt="cidade contemporânea com telas, multidão, isolamento e símbolos do mal-estar cultural"></div>
-
-        <h3>7.9 Psicologia das massas, grupos e fenômenos coletivos</h3>
-        <p>Outro campo clássico da psicanálise aplicada é o estudo dos grupos. Freud demonstrou que, em massas e coletivos, os sujeitos podem organizar-se em torno de identificação, idealização do líder, suspensão parcial da crítica e intensificação afetiva. Esses mecanismos ajudam a entender movimentos de massa, fanatismo, obediência, polarização e contágio emocional.</p>
-        <p>Neste módulo, o aluno estudará como a psicanálise pode contribuir para a leitura de organizações, instituições, comunidades digitais e fenômenos coletivos contemporâneos. Serão abordados pertencimento, rivalidade, ideal do grupo, segregação, bode expiatório, identificação horizontal e vertical e os efeitos subjetivos da vida em rede. Isso amplia a formação clínica porque mostra que o sujeito do inconsciente não existe fora do laço social.</p>
-        <div class="image-placeholder" data-number="35" data-prompt="multidão contemporânea vista de cima, conexões emocionais, líder simbólico e dinâmica de massa"></div>
-
-        <h3>7.10 Ética da aplicação e limites da interpretação</h3>
-        <p>Uma escola séria precisa ensinar não apenas a potência da psicanálise aplicada, mas também seus limites. Não é ético utilizar categorias clínicas como rótulos rápidos em debates públicos, nem transformar sofrimento alheio em curiosidade interpretativa. A aplicação da psicanálise deve manter discrição, consistência conceitual, respeito às singularidades e prudência diante de contextos que não se equivalem ao setting clínico.</p>
-        <p>O aluno será treinado para reconhecer quando a psicanálise oferece uma hipótese fecunda e quando é melhor suspender a interpretação. Essa atitude é decisiva para posicionamento internacional premium: rigor, sofisticação e responsabilidade. A qualidade de uma leitura psicanalítica aplicada não depende da ousadia retórica, mas da precisão conceitual, da sensibilidade ao objeto analisado e da capacidade de preservar complexidade.</p>
-        <div class="image-placeholder" data-number="36" data-prompt="balança conceitual entre interpretação e prudência, com livros, máscara e luz suave"></div>
-
-        <h3>7.11 Competências esperadas</h3>
-        <ul>
-          <li>Definir com clareza o que é psicanálise aplicada e seus limites metodológicos.</li>
-          <li>Realizar leituras psicanalíticas de obras literárias, filmes e expressões artísticas com rigor conceitual.</li>
-          <li>Compreender a contribuição da psicanálise para educação, religião, cultura e fenômenos coletivos.</li>
-          <li>Articular sublimação, fantasia, identificação, idealização, culpa e mal-estar social em análises interdisciplinares.</li>
-          <li>Sustentar postura ética e sofisticada na aplicação da psicanálise fora do setting clínico.</li>
-        </ul>
-      </section>
-
-      <section id="modulo8" class="module">
-        <h2>Módulo 8: Psicanálise Infantil e do Adolescente (80h)</h2>
-        <p class="module-lead">Este módulo apresenta as especificidades da clínica com crianças e adolescentes, considerando linguagem, brincar, constituição subjetiva, família e escola.</p>
-        <h3>8.1 O brincar como linguagem</h3>
-        <p>Na clínica infantil, o brincar pode ocupar função semelhante à associação livre. A criança comunica fantasias, ansiedades, conflitos e formas de simbolização por meio do jogo, do desenho, da encenação e da repetição.</p>
-        <div class="image-placeholder" data-number="28" data-prompt="criança em consultório acolhedor com brinquedos simbólicos e atmosfera clínica sensível"></div>
-        <h3>8.2 Família, sintomas e desenvolvimento</h3>
-        <p>O sintoma infantil deve ser escutado dentro de uma rede relacional. O módulo aborda função parental, separação, rivalidade fraterna, angústias de desenvolvimento e articulação com escola e ambiente.</p>
-        <h3>8.3 Adolescência</h3>
-        <p>Na adolescência, reaparecem com intensidade questões ligadas ao corpo, identidade, sexualidade, pertencimento, idealização e luto pelas referências infantis. O manejo clínico requer leitura cuidadosa da transição subjetiva.</p>
-        <ul>
-          <li>Brincar, desenho e simbolização.</li>
-          <li>Transferência com crianças e adolescentes.</li>
-          <li>Família, escola e sofrimento psíquico.</li>
-          <li>Puberdade, identidade e laço social.</li>
-        </ul>
-      </section>
-
-      <section id="modulo9" class="module">
-        <h2>Módulo 9: Psicossomática e Neurociências (60h)</h2>
-        <p class="module-lead">O objetivo deste módulo é integrar, com rigor e prudência, a clínica psicanalítica às discussões sobre corpo, afetos, regulação emocional e pesquisas contemporâneas do cérebro.</p>
-        <h3>9.1 Corpo e inscrição psíquica</h3>
-        <p>A psicossomática investiga como conflitos, angústias e falhas de simbolização podem repercutir no corpo. Não se trata de reduzir doença a “problema emocional”, mas de reconhecer a complexidade da relação entre soma e psiquismo.</p>
-        <div class="image-placeholder" data-number="29" data-prompt="cérebro e corpo conectados por linhas afetivas e simbólicas em visual sofisticado"></div>
-        <h3>9.2 Neuropsicanálise</h3>
-        <p>Serão apresentadas aproximações contemporâneas entre processos inconscientes, memória, sonho, afeto e funcionamento cerebral, preservando a especificidade conceitual da psicanálise.</p>
-        <ul>
-          <li>Psicossomática e simbolização.</li>
-          <li>Afeto, corpo e trauma.</li>
-          <li>Neurociências e limites do diálogo interdisciplinar.</li>
-          <li>Implicações clínicas.</li>
-        </ul>
-      </section>
-
-      <section id="modulo10" class="module">
-        <h2>Módulo 10: Psicofarmacologia e Psiquiatria para Psicanalistas (40h)</h2>
-        <p class="module-lead">Este módulo fornece base introdutória para interlocução responsável com a psiquiatria e com o uso de psicofármacos em contextos clínicos.</p>
-        <h3>10.1 Diagnóstico diferencial e limites de atuação</h3>
-        <p>O analista precisa reconhecer sinais de risco, sofrimento grave, urgências e situações que exigem articulação com outros profissionais. Isso inclui avaliação de encaminhamento, trabalho em rede e compreensão básica da psicopatologia psiquiátrica.</p>
-        <h3>10.2 Psicofármacos e clínica integrada</h3>
-        <p>Serão abordadas classes básicas de psicofármacos, efeitos gerais, adesão, resistência ao tratamento e o lugar do cuidado compartilhado entre profissionais.</p>
-        <div class="image-placeholder" data-number="30" data-prompt="elementos médicos minimalistas integrados a símbolos de escuta clínica"></div>
-        <ul>
-          <li>Limites técnicos e éticos do analista.</li>
-          <li>Interlocução com psiquiatria.</li>
-          <li>Noções básicas de psicofarmacologia.</li>
-          <li>Encaminhamento e cuidado interdisciplinar.</li>
-        </ul>
-      </section>
-
-      <section id="modulo11" class="module">
-        <h2>Módulo 11: Ética, Legislação e Deontologia (40h)</h2>
-        <p class="module-lead">Este módulo organiza os princípios éticos indispensáveis ao exercício responsável da psicanálise, incluindo sigilo, enquadre, responsabilidade civil e postura profissional.</p>
-        <h3>11.1 Ética da clínica</h3>
-        <p>A ética psicanalítica vai além de regras formais. Ela envolve respeito à singularidade, manejo do poder transferencial, não exploração do paciente, sigilo, consistência do enquadre e responsabilidade com os efeitos da palavra.</p>
-        <div class="image-placeholder" data-number="31" data-prompt="balança da justiça integrada a divã e livro, em estética institucional premium"></div>
-        <h3>11.2 Legislação e atuação profissional</h3>
-        <p>O módulo orienta sobre documentação, contratos, comunicação profissional, limites do exercício clínico e cuidados necessários para atuação ética no contexto brasileiro e internacional.</p>
-        <ul>
-          <li>Sigilo e confidencialidade.</li>
-          <li>Responsabilidade civil e postura técnica.</li>
-          <li>Documentação e comunicação profissional.</li>
-          <li>Normas institucionais e boas práticas.</li>
-        </ul>
-      </section>
-
-      <section id="modulo12" class="module">
-        <h2>Módulo 12: Gestão, Posicionamento e Carreira Clínica (40h)</h2>
-        <p class="module-lead">Uma formação sólida também exige preparo para sustentar carreira com seriedade, ética e visão institucional. Este módulo aborda presença profissional, gestão e posicionamento de longo prazo.</p>
-        <h3>12.1 Estrutura do consultório</h3>
-        <p>Organização de agenda, frequência, precificação, comunicação, rotina administrativa e experiência do paciente são apresentados de forma alinhada à ética clínica.</p>
-        <h3>12.2 Marca profissional e autoridade</h3>
-        <p>O estudante aprenderá a construir posicionamento consistente, imagem institucional, linguagem adequada, presença digital sóbria e comunicação compatível com uma escola premium.</p>
-        <div class="image-placeholder" data-number="32" data-prompt="consultório premium com identidade visual refinada, agenda e presença digital elegante"></div>
-        <ul>
-          <li>Gestão de consultório.</li>
-          <li>Presença digital ética.</li>
-          <li>Autoridade, reputação e posicionamento.</li>
-          <li>Planejamento de carreira clínica e institucional.</li>
-        </ul>
-      </section>
-
-      <section id="modulo13" class="module">
-        <h2>Módulo 13: Clínica Supervisionada, Análise Pessoal e Integração Final (240h)</h2>
-        <p class="module-lead">O módulo final reúne a essência da formação psicanalítica: integração entre teoria, prática clínica, supervisão e análise pessoal. Aqui o aluno consolida sua identidade clínica e transforma conhecimento em escuta efetiva.</p>
-        <h3>13.1 Supervisão clínica</h3>
-        <p>A supervisão é o espaço em que o caso é pensado, a escuta é afinada e as dificuldades técnicas são trabalhadas com profundidade. Não se trata apenas de correção, mas de formação do olhar clínico.</p>
-        <h3>13.2 Análise pessoal</h3>
-        <p>A análise pessoal é dimensão indispensável do percurso. Ela permite ao futuro analista confrontar sua própria história, suas resistências, seus ideais e os pontos cegos que influenciam sua escuta.</p>
-        <div class="image-placeholder" data-number="33" data-prompt="sala de supervisão premium com analistas em diálogo e clima acadêmico refinado"></div>
-        <h3>13.3 Integração final</h3>
-        <p>O estudante aprende a articular teoria, técnica, ética, posição subjetiva e leitura de caso. Esse fechamento é o ponto em que a formação deixa de ser apenas acúmulo de conteúdos e se torna maturidade clínica.</p>
-        <ul>
-          <li>Estudo de casos e elaboração clínica.</li>
-          <li>Supervisão individual e em grupo.</li>
-          <li>Análise pessoal e responsabilidade subjetiva.</li>
-          <li>Integração dos 13 módulos em prática coerente.</li>
-        </ul>
+      <section class="panel">
+        <div class="panel__header">
+          <div>
+            <p class="panel__eyebrow">Faixas</p>
+            <h2>Energia espectral por região</h2>
+          </div>
+        </div>
+        <div id="bandsBars" class="bands-bars"></div>
       </section>
     </main>
+  </div>
 
-    <section id="sobre" class="about">
-      <div class="container">
-        <h2>Sobre a Estrutura do Programa</h2>
-        <p>
-          O site foi organizado em <strong>4 blocos formativos</strong> para sustentar uma progressão pedagógica clara e premium: fundamentos, estrutura clínica, especializações e profissionalização. Essa divisão torna a navegação mais inteligente, facilita a expansão futura do conteúdo e oferece uma experiência visual compatível com uma escola internacional de formação em psicanálise clínica.
-        </p>
-        <p>
-          O currículo foi desenhado para comportar aprofundamento textual, inserção futura de imagens por inteligência artificial, expansão para trilhas premium, biblioteca digital, área do aluno e módulos complementares sem necessidade de reconstrução do site.
-        </p>
-      </div>
-    </section>
-
-    <section id="contato" class="contact">
-      <div class="container">
-        <h2>Contato</h2>
-        <p>
-          Para matrícula, parcerias institucionais, convites acadêmicos e informações sobre expansão do programa,
-          utilize o e-mail <a href="mailto:contato@modernpsychoanalyticschool.com">contato@modernpsychoanalyticschool.com</a>.
-        </p>
-      </div>
-    </section>
-
-    <footer class="footer">
-      <div class="container">
-        <p><strong>Modern Psychoanalytic School</strong> — Programa de Formação em Psicanálise Clínica</p>
-        <p>Todos os direitos reservados.</p>
-        <p class="build-stamp" id="buildStamp" data-build="20/03/2026 19:40">Build do site: 20/03/2026 19:40</p>
-      </div>
-    </footer>
-  </body>
+  <script src="app.js"></script>
+</body>
 </html>
