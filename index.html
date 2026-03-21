@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mix Analyzer</title>
+  <title>MasterCheck</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="assets/mastercheck-logo.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -14,22 +15,28 @@
     <header class="hero">
       <div class="hero__overlay"></div>
       <div class="hero__content">
-        <div class="brand-row">
-          <div class="brand-mark">MA</div>
+        <div class="brand-row brand-row--hero">
+          <img class="brand-logo" src="assets/mastercheck-logo.png" alt="Logo MasterCheck" />
           <div>
-            <p class="eyebrow">Primeira Build do Projeto</p>
-            <h1>Mix Analyzer</h1>
+            <p class="eyebrow">Fase 2 · identidade visual aplicada</p>
+            <h1>MasterCheck</h1>
+            <p class="hero__tagline">Análise inteligente de áudio para mix e master</p>
           </div>
         </div>
         <p class="hero__text">
-          Analisador inteligente de áudio para mix e master com leitura local de arquivos WAV e MP3,
-          visualização, diagnóstico técnico e recomendações automáticas.
+          Plataforma visual para diagnóstico local de arquivos WAV e MP3, com waveform, espectro,
+          leitura técnica, alertas automáticos e base pronta para evoluir até o resultado final do produto.
         </p>
         <div class="hero__actions">
           <label class="button button--primary upload-button" for="audioFile">Carregar áudio</label>
           <button id="analyzeBtn" class="button button--secondary" disabled>Analisar agora</button>
         </div>
-        <div class="build-chip">Build: <span id="buildStamp">2026-03-21 14:56:42</span></div>
+        <div class="build-chip">Build: <span id="buildStamp">2026-03-21 15-21-00</span></div>
+        <div class="hero-badges">
+          <span class="hero-badge">Logo oficial aplicado</span>
+          <span class="hero-badge">Projeto local e offline</span>
+          <span class="hero-badge">ZIP completo</span>
+        </div>
       </div>
     </header>
 
@@ -81,7 +88,7 @@
           <div class="panel__header">
             <div>
               <p class="panel__eyebrow">Visual</p>
-              <h2>Waveform</h2>
+              <h2>Waveform detalhada</h2>
             </div>
           </div>
           <canvas id="waveCanvas" width="1200" height="260"></canvas>
@@ -91,7 +98,7 @@
           <div class="panel__header">
             <div>
               <p class="panel__eyebrow">Visual</p>
-              <h2>Espectro</h2>
+              <h2>Espectro principal</h2>
             </div>
           </div>
           <canvas id="spectrumCanvas" width="1200" height="260"></canvas>
@@ -127,7 +134,7 @@
         <article class="metric-card">
           <span class="metric-card__label">Diagnóstico</span>
           <strong id="metricHealth">Aguardando</strong>
-          <small>Resumo automático do arquivo</small>
+          <small>Status geral do áudio analisado</small>
         </article>
       </section>
 
@@ -165,6 +172,32 @@
           </div>
         </div>
         <div id="bandsBars" class="bands-bars"></div>
+      </section>
+
+      <section class="panel panel--roadmap">
+        <div class="panel__header">
+          <div>
+            <p class="panel__eyebrow">Projeto</p>
+            <h2>Fase atual do MasterCheck</h2>
+          </div>
+        </div>
+        <div class="roadmap-grid">
+          <article class="roadmap-card roadmap-card--done">
+            <span>01</span>
+            <strong>Base visual</strong>
+            <p>Upload, player, waveform, espectro e métricas principais.</p>
+          </article>
+          <article class="roadmap-card roadmap-card--active">
+            <span>02</span>
+            <strong>Branding aplicado</strong>
+            <p>Logo oficial, ícone do app, identidade mais profissional e layout reforçado.</p>
+          </article>
+          <article class="roadmap-card">
+            <span>03</span>
+            <strong>Próxima evolução</strong>
+            <p>Relatório exportável, análise por janelas e refinamento do diagnóstico.</p>
+          </article>
+        </div>
       </section>
     </main>
   </div>

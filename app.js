@@ -1,4 +1,4 @@
-const BUILD_STAMP = '2026-03-21 14:56:42';
+const BUILD_STAMP = '2026-03-21 15-21-00';
 
 document.getElementById('buildStamp').textContent = BUILD_STAMP;
 
@@ -92,7 +92,7 @@ async function handleFile(file) {
     fileRateEl.textContent = `${audioBuffer.sampleRate} Hz`;
 
     drawWaveform(audioBuffer);
-    drawSpectrumPlaceholder('Pronto para análise');
+    drawSpectrumPlaceholder('MasterCheck pronto para análise');
     analyzeBtn.disabled = false;
     setStatus('ready', 'Arquivo pronto');
   } catch (error) {
