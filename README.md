@@ -1,46 +1,37 @@
-# MasterCheck - Build 2026-03-21 15-21-00
+# MasterCheck
 
-Upgrade completo da fase 2 do projeto, agora com identidade visual oficial aplicada, logo integrado ao site e ícone do aplicativo configurado.
+Build: 2026-03-23 16-24-00
 
-## O que esta build já faz
-- importa áudio local (WAV / MP3, conforme suporte do navegador)
-- exibe player embutido
-- mostra waveform do arquivo
-- estima espectro por FFT local
-- calcula métricas base:
-  - Peak
-  - RMS
-  - Crest Factor
-  - Sibilância estimada
-  - Estado estéreo básico
-- aplica regras iniciais de diagnóstico para:
-  - médios-graves embolados
-  - aspereza em agudos
-  - sibilância
-  - dinâmica reduzida
-  - headroom apertado
-  - subgrave em evidência
-  - atenção em compatibilidade mono
-- gera resumo textual automático
-- exibe build visível dentro da interface
-- usa a logo MasterCheck em destaque
-- configura a imagem como ícone do app/site
+## O que esta build entrega
 
-## Estrutura
-- `index.html` → interface principal
-- `style.css` → identidade visual e layout
-- `app.js` → lógica de upload, visualização e análise
-- `assets/mastercheck-logo.png` → logo oficial aplicada ao projeto
+Fase 6 com foco no diferencial: referências internas mais completas, detectores expandidos e gráfico avançado de equalização.
 
-## Como rodar
-1. Extraia o ZIP.
-2. Abra `index.html` no navegador.
-3. Carregue um arquivo de áudio.
+- logo MasterCheck aplicada grande no site e como ícone
+- build visível na interface
+- biblioteca interna de presets de referência
+- editor local para ensinar novas referências ao app sem faixa externa
+- análise de waveform, espectro e curva tonal vs preset
+- gráficos de equalização e painel de efeitos/indícios
+- exportação de relatório em TXT
+- análise por trechos (início, meio e final)
+
+## Como usar
+
+1. Abra index.html no navegador.
+2. Escolha um preset interno.
+3. Carregue um WAV ou MP3.
 4. Clique em **Analisar agora**.
+5. Se quiser ensinar uma nova referência ao app, use a seção **Preset Studio** e salve um preset customizado.
+6. Para exportar o texto da análise, clique em **Exportar relatório**.
 
-## Próxima fase sugerida
-- exportação de relatório
-- leitura por janelas temporais
-- refinamento de classificação tonal
-- comparação com referência
-- empacotar como app desktop no futuro
+## Observação técnica
+
+Nesta fase, compressão, de-esser, reverberação e saturação são estimados por heurísticas locais. O foco é construir a base do produto com referências internas e gráficos úteis, para evoluir os detectores nas próximas builds.
+
+
+## Evolução desta fase
+
+- novos presets internos: gospel, broadcast, cinematic e vocal bright
+- gráfico avançado de equalização por frequência vs preset
+- detectores expandidos: harshness, masking e transient/punch
+- lógica reforçada para construir uma biblioteca interna de referência sem exigir faixa externa do usuário

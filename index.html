@@ -4,199 +4,254 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MasterCheck</title>
+  <meta name="description" content="MasterCheck - análise inteligente de áudio para mix e master com referências internas, gráficos e diagnóstico local." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="assets/mastercheck-logo.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="app-shell">
-    <header class="hero">
-      <div class="hero__overlay"></div>
-      <div class="hero__content">
-        <div class="brand-row brand-row--hero">
-          <img class="brand-logo" src="assets/mastercheck-logo.png" alt="Logo MasterCheck" />
-          <div>
-            <p class="eyebrow">Fase 2 · identidade visual aplicada</p>
+  <div class="shell">
+    <header class="hero panel">
+      <div class="hero__glow"></div>
+      <div class="hero__main">
+        <div class="brand-wrap">
+          <img src="assets/mastercheck-logo.png" alt="Logo MasterCheck" class="hero__logo">
+          <div class="hero__copy">
+            <span class="eyebrow">Fase 6 · referências internas · gráficos avançados · detectores expandidos</span>
             <h1>MasterCheck</h1>
-            <p class="hero__tagline">Análise inteligente de áudio para mix e master</p>
+            <p class="tagline">Análise inteligente de áudio para mix e master com referências internas — sem precisar carregar faixa de referência.</p>
+            <p class="hero__text">
+              O objetivo final do MasterCheck é detectar equalização, compressão, necessidade de de-esser, reverberação,
+              saturação e outros indícios sonoros relevantes, comparando tudo com presets internos e referências ensináveis.
+              Nesta fase o app ganha detectores expandidos, gráfico avançado de equalização por frequência e uma base interna de presets ainda mais completa para sustentar o diferencial do produto.
+            </p>
+            <div class="hero__actions">
+              <label class="button button--primary" for="audioFile">Carregar áudio</label>
+              <button id="analyzeBtn" class="button button--secondary" disabled>Analisar agora</button>
+              <button id="exportBtn" class="button button--ghost" disabled>Exportar relatório</button>
+              <button id="resetBtn" class="button button--ghost">Limpar</button>
+            </div>
+            <div class="hero__meta">
+              <div class="meta-chip">Build: <strong id="buildStamp"></strong></div>
+              <div class="meta-chip">Modo: <strong>Offline e local</strong></div>
+              <div class="meta-chip">Entrega: <strong>ZIP completo</strong></div>
+              <div class="meta-chip">Marca: <strong>MasterCheck</strong></div>
+            </div>
           </div>
-        </div>
-        <p class="hero__text">
-          Plataforma visual para diagnóstico local de arquivos WAV e MP3, com waveform, espectro,
-          leitura técnica, alertas automáticos e base pronta para evoluir até o resultado final do produto.
-        </p>
-        <div class="hero__actions">
-          <label class="button button--primary upload-button" for="audioFile">Carregar áudio</label>
-          <button id="analyzeBtn" class="button button--secondary" disabled>Analisar agora</button>
-        </div>
-        <div class="build-chip">Build: <span id="buildStamp">2026-03-21 15-21-00</span></div>
-        <div class="hero-badges">
-          <span class="hero-badge">Logo oficial aplicado</span>
-          <span class="hero-badge">Projeto local e offline</span>
-          <span class="hero-badge">ZIP completo</span>
         </div>
       </div>
     </header>
 
     <main class="dashboard">
-      <section class="panel panel--upload">
+      <section class="panel">
         <div class="panel__header">
           <div>
-            <p class="panel__eyebrow">Entrada</p>
-            <h2>Arquivo de áudio</h2>
+            <p class="section-eyebrow">Entrada</p>
+            <h2>Arquivo + preset interno</h2>
           </div>
           <span id="fileStatus" class="status status--idle">Aguardando arquivo</span>
         </div>
 
-        <input id="audioFile" type="file" accept="audio/*,.wav,.mp3" hidden />
+        <input id="audioFile" type="file" accept="audio/*,.wav,.mp3" hidden>
 
-        <div class="dropzone" id="dropzone">
-          <div class="dropzone__icon">♪</div>
-          <div>
-            <h3>Arraste seu áudio aqui</h3>
-            <p>Compatível com WAV e MP3. Tudo roda localmente no seu navegador.</p>
+        <div class="top-grid">
+          <div id="dropzone" class="dropzone">
+            <div class="dropzone__icon">MC</div>
+            <div>
+              <h3>Importar WAV ou MP3</h3>
+              <p>Todo o processamento acontece no navegador. Sem API externa, sem enviar áudio.</p>
+            </div>
+          </div>
+
+          <div class="preset-box">
+            <label for="presetSelect">Preset de referência interna</label>
+            <div class="preset-inline">
+              <select id="presetSelect"></select>
+              <button id="syncPresetBtn" class="button button--mini">Aplicar ao editor</button>
+            </div>
+            <p id="presetDescription" class="muted"></p>
+            <div class="preset-badges">
+              <span class="mini-badge">Sem faixa A/B</span>
+              <span class="mini-badge">Referências internas</span>
+              <span class="mini-badge">Customizável</span>
+            </div>
           </div>
         </div>
 
         <div class="player-wrap">
           <audio id="audioPlayer" controls></audio>
-          <div class="file-meta">
-            <div>
-              <span class="meta-label">Arquivo</span>
-              <strong id="fileName">Nenhum arquivo carregado</strong>
-            </div>
-            <div>
-              <span class="meta-label">Duração</span>
-              <strong id="fileDuration">--:--</strong>
-            </div>
-            <div>
-              <span class="meta-label">Canal</span>
-              <strong id="fileChannels">--</strong>
-            </div>
-            <div>
-              <span class="meta-label">Sample rate</span>
-              <strong id="fileRate">--</strong>
-            </div>
+          <div class="meta-grid">
+            <div class="meta-card"><span>Arquivo</span><strong id="fileName">Nenhum arquivo carregado</strong></div>
+            <div class="meta-card"><span>Duração</span><strong id="fileDuration">--:--</strong></div>
+            <div class="meta-card"><span>Canais</span><strong id="fileChannels">--</strong></div>
+            <div class="meta-card"><span>Sample rate</span><strong id="fileRate">--</strong></div>
           </div>
         </div>
       </section>
 
-      <section class="grid grid--2">
+      <section class="metrics-grid">
+        <article class="stat-card"><span>Peak</span><strong id="metricPeak">-- dBFS</strong><small>Pico máximo</small></article>
+        <article class="stat-card"><span>RMS</span><strong id="metricRms">-- dBFS</strong><small>Nível médio aproximado</small></article>
+        <article class="stat-card"><span>Crest Factor</span><strong id="metricCrest">-- dB</strong><small>Leitura de dinâmica</small></article>
+        <article class="stat-card"><span>Sibilância</span><strong id="metricSibilance">--</strong><small>Indicador de de-esser</small></article>
+        <article class="stat-card"><span>Reverberação</span><strong id="metricReverb">--</strong><small>Estimativa de wash/cauda</small></article>
+        <article class="stat-card"><span>Saturação</span><strong id="metricSaturation">--</strong><small>Stress harmônico / flat top</small></article>
+        <article class="stat-card"><span>Estéreo</span><strong id="metricStereo">--</strong><small>Largura e correlação</small></article>
+        <article class="stat-card"><span>Saúde geral</span><strong id="metricHealth">Aguardando</strong><small>Resumo de prioridade</small></article>
+      </section>
+
+      <section class="two-col">
         <section class="panel">
-          <div class="panel__header">
-            <div>
-              <p class="panel__eyebrow">Visual</p>
-              <h2>Waveform detalhada</h2>
-            </div>
-          </div>
+          <div class="panel__header"><div><p class="section-eyebrow">Visual</p><h2>Waveform</h2></div></div>
           <canvas id="waveCanvas" width="1200" height="260"></canvas>
         </section>
-
         <section class="panel">
-          <div class="panel__header">
-            <div>
-              <p class="panel__eyebrow">Visual</p>
-              <h2>Espectro principal</h2>
-            </div>
-          </div>
+          <div class="panel__header"><div><p class="section-eyebrow">Visual</p><h2>Espectro principal</h2></div></div>
           <canvas id="spectrumCanvas" width="1200" height="260"></canvas>
         </section>
       </section>
 
-      <section class="grid grid--3 stats-grid">
-        <article class="metric-card">
-          <span class="metric-card__label">Peak</span>
-          <strong id="metricPeak">-- dBFS</strong>
-          <small>Pico máximo detectado</small>
-        </article>
-        <article class="metric-card">
-          <span class="metric-card__label">RMS</span>
-          <strong id="metricRms">-- dBFS</strong>
-          <small>Nível médio de energia</small>
-        </article>
-        <article class="metric-card">
-          <span class="metric-card__label">Crest Factor</span>
-          <strong id="metricCrest">-- dB</strong>
-          <small>Indício de dinâmica / compressão</small>
-        </article>
-        <article class="metric-card">
-          <span class="metric-card__label">Sibilância</span>
-          <strong id="metricSibilance">--</strong>
-          <small>Score estimado entre 5 e 10 kHz</small>
-        </article>
-        <article class="metric-card">
-          <span class="metric-card__label">Estéreo</span>
-          <strong id="metricStereo">--</strong>
-          <small>Largura e correlação básica</small>
-        </article>
-        <article class="metric-card">
-          <span class="metric-card__label">Diagnóstico</span>
-          <strong id="metricHealth">Aguardando</strong>
-          <small>Status geral do áudio analisado</small>
-        </article>
-      </section>
-
-      <section class="grid grid--2">
+      <section class="two-col">
         <section class="panel">
           <div class="panel__header">
             <div>
-              <p class="panel__eyebrow">Diagnóstico</p>
-              <h2>Problemas detectados</h2>
+              <p class="section-eyebrow">Equalização</p>
+              <h2>Curva tonal vs preset interno</h2>
             </div>
           </div>
-          <div id="issuesList" class="issues-list empty-state">
-            Carregue um arquivo e clique em <strong>Analisar agora</strong>.
-          </div>
+          <canvas id="tonalCanvas" width="1200" height="320"></canvas>
+          <div class="eq-caption">Visão macro por bandas do equilíbrio tonal comparado com a referência interna selecionada.</div>
+          <div id="bandsBars" class="bands"></div>
         </section>
-
         <section class="panel">
           <div class="panel__header">
             <div>
-              <p class="panel__eyebrow">Relatório</p>
-              <h2>Resumo inteligente</h2>
+              <p class="section-eyebrow">Equalização detalhada</p>
+              <h2>Mapa de frequência vs referência interna</h2>
             </div>
           </div>
-          <div id="summaryText" class="summary-box empty-state">
-            O relatório completo será gerado automaticamente após a análise.
-          </div>
+          <canvas id="eqDetailCanvas" width="1200" height="320"></canvas>
+          <div class="eq-caption">O app cruza a assinatura espectral do áudio com as metas do preset sem exigir faixa A/B externa.</div>
         </section>
       </section>
 
       <section class="panel">
         <div class="panel__header">
           <div>
-            <p class="panel__eyebrow">Faixas</p>
-            <h2>Energia espectral por região</h2>
+            <p class="section-eyebrow">Detecção</p>
+            <h2>Mapa de efeitos / indícios</h2>
           </div>
         </div>
-        <div id="bandsBars" class="bands-bars"></div>
+        <canvas id="effectsCanvas" width="1200" height="320"></canvas>
+        <div id="effectsList" class="effects-list empty-state">Aguardando análise.</div>
       </section>
 
-      <section class="panel panel--roadmap">
+      <section class="three-col">
+        <section class="panel">
+          <div class="panel__header"><div><p class="section-eyebrow">Diagnóstico</p><h2>Problemas detectados</h2></div></div>
+          <div id="issuesList" class="stack empty-state">Carregue um arquivo e clique em <strong>Analisar agora</strong>.</div>
+        </section>
+        <section class="panel">
+          <div class="panel__header"><div><p class="section-eyebrow">Resumo</p><h2>Leitura inteligente</h2></div></div>
+          <div id="summaryText" class="summary-box empty-state">O relatório completo aparecerá aqui após a análise.</div>
+          <div id="recommendations" class="recommendations"></div>
+        </section>
+        <section class="panel">
+          <div class="panel__header"><div><p class="section-eyebrow">Trechos</p><h2>Início / meio / final</h2></div></div>
+          <div id="segmentsGrid" class="segments-grid empty-state">Quando a análise terminar, o app compara os 3 trechos principais do áudio.</div>
+        </section>
+      </section>
+
+      <section class="panel">
         <div class="panel__header">
           <div>
-            <p class="panel__eyebrow">Projeto</p>
-            <h2>Fase atual do MasterCheck</h2>
+            <p class="section-eyebrow">Preset Studio</p>
+            <h2>Ensinar referências internas ao app</h2>
+          </div>
+          <div class="preset-actions-inline">
+            <button id="savePresetBtn" class="button button--secondary">Salvar preset customizado</button>
+            <button id="deletePresetBtn" class="button button--ghost">Excluir preset atual</button>
           </div>
         </div>
-        <div class="roadmap-grid">
-          <article class="roadmap-card roadmap-card--done">
-            <span>01</span>
-            <strong>Base visual</strong>
-            <p>Upload, player, waveform, espectro e métricas principais.</p>
-          </article>
-          <article class="roadmap-card roadmap-card--active">
-            <span>02</span>
-            <strong>Branding aplicado</strong>
-            <p>Logo oficial, ícone do app, identidade mais profissional e layout reforçado.</p>
-          </article>
-          <article class="roadmap-card">
-            <span>03</span>
-            <strong>Próxima evolução</strong>
-            <p>Relatório exportável, análise por janelas e refinamento do diagnóstico.</p>
-          </article>
+        <p class="muted block-text">
+          Aqui você pode ensinar referências internas ao MasterCheck sem obrigar o usuário final a carregar faixa de referência.
+          Ajuste as metas tonais e métricas abaixo, salve um preset customizado e o app passa a analisar com essa referência local.
+        </p>
+        <div class="editor-grid">
+          <div class="editor-card">
+            <label>Nome do preset</label>
+            <input id="customPresetName" type="text" placeholder="Ex.: Gospel Master Wide" />
+            <label>Descrição</label>
+            <textarea id="customPresetDescription" rows="3" placeholder="Descreva o objetivo do preset."></textarea>
+            <label>Target Crest (dB)</label>
+            <input id="targetCrest" type="number" step="0.1" />
+            <label>Target RMS (dBFS)</label>
+            <input id="targetRms" type="number" step="0.1" />
+            <label>Sibilância máxima (0–1)</label>
+            <input id="targetSibilance" type="number" step="0.01" min="0" max="1" />
+            <label>Reverberação máxima (0–1)</label>
+            <input id="targetReverb" type="number" step="0.01" min="0" max="1" />
+            <label>Saturação máxima (0–1)</label>
+            <input id="targetSaturation" type="number" step="0.01" min="0" max="1" />
+            <label>Largura estéreo ideal (0–1.2)</label>
+            <input id="targetStereo" type="number" step="0.01" min="0" max="1.2" />
+            <label>Peak máximo (dBFS)</label>
+            <input id="targetPeak" type="number" step="0.1" />
+          </div>
+
+          <div class="editor-card editor-card--wide">
+            <div class="band-editor-grid">
+              <div>
+                <label>Subgrave (%)</label>
+                <input id="band_sub" type="number" step="0.1" />
+              </div>
+              <div>
+                <label>Grave (%)</label>
+                <input id="band_low" type="number" step="0.1" />
+              </div>
+              <div>
+                <label>Médio-grave (%)</label>
+                <input id="band_lowMid" type="number" step="0.1" />
+              </div>
+              <div>
+                <label>Médios (%)</label>
+                <input id="band_mid" type="number" step="0.1" />
+              </div>
+              <div>
+                <label>Presença (%)</label>
+                <input id="band_presence" type="number" step="0.1" />
+              </div>
+              <div>
+                <label>Brilho (%)</label>
+                <input id="band_high" type="number" step="0.1" />
+              </div>
+              <div>
+                <label>Ar (%)</label>
+                <input id="band_air" type="number" step="0.1" />
+              </div>
+            </div>
+            <div class="note-card">
+              <strong>Diferencial de produto</strong>
+              <p>
+                MasterCheck não depende de A/B manual com faixa externa. A estratégia é construir uma biblioteca interna de referências,
+                por preset e por objetivo, tornando a experiência mais rápida e consistente para quem está mixando ou masterizando.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel__header"><div><p class="section-eyebrow">Roadmap</p><h2>Construção para o resultado final</h2></div></div>
+        <div class="roadmap">
+          <article class="road-card done"><span>01</span><strong>Base offline</strong><p>Upload, player, waveform, espectro e métricas centrais.</p></article>
+          <article class="road-card done"><span>02</span><strong>Marca aplicada</strong><p>Logo oficial grande no site e como ícone do app.</p></article>
+          <article class="road-card done"><span>03</span><strong>Relatório e trechos</strong><p>Resumo exportável e análise por janelas principais.</p></article>
+          <article class="road-card done"><span>04</span><strong>Referências internas</strong><p>Preset library + editor local + gráfico tonal comparativo.</p></article>
+          <article class="road-card active"><span>05</span><strong>Detectores expandidos</strong><p>Compressão, transient/punch, harshness, masking e gráfico de EQ por frequência.</p></article>
+          <article class="road-card"><span>06</span><strong>Próxima meta</strong><p>Calibração mais profunda por contexto de fonte sonora e presets internos ainda mais granulares.</p></article>
         </div>
       </section>
     </main>
