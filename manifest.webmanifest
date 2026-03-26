@@ -1,7 +1,7 @@
 {
   "name": "MasterCheck",
   "short_name": "MasterCheck",
-  "description": "Análise inteligente de áudio para mix e master com timeline por trechos e instalação no Android.",
+  "description": "Análise inteligente de áudio para mix e master com recomendações automáticas.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#090b10",

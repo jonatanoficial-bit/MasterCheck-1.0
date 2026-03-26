@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MasterCheck</title>
   <meta name="theme-color" content="#0b5cff">
-  <meta name="description" content="MasterCheck instalável no Android com análise temporal de áudio.">
+  <meta name="description" content="MasterCheck instalável no Android com timeline, matriz geral e recomendações automáticas.">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="apple-touch-icon" href="icon-192.png">
@@ -15,29 +15,30 @@
   <div class="app-shell">
     <header class="hero">
       <div class="brand-wrap">
-        <img src="logo.png" alt="MasterCheck" class="brand-logo">
-        <div>
+        <img src="assets/logo_header.png" alt="MasterCheck" class="brand-logo">
+        <div class="brand-copy">
           <div class="eyebrow">AUDIO ANALYSIS SUITE</div>
           <h1>MasterCheck</h1>
-          <p class="subtitle">Upgrade com inteligência por trechos, timeline de problemas, ações recomendadas e instalação no Android como PWA.</p>
-          <div class="build-line">Build visível: <strong>2026-03-25_13-29-28</strong></div>
+          <p class="subtitle">Nova fase com motor interno de decisão, matriz geral de diagnóstico, timeline por trechos, receitas de correção e instalação Android via PWA.</p>
+          <div class="build-line">Build visível: <strong>2026-03-26_13-54-01</strong></div>
+          <div class="build-line">Conclusão estimada do projeto: <strong>68%</strong></div>
         </div>
       </div>
       <div class="hero-badges">
-        <span>Timeline Intelligence</span>
-        <span>Instalável no Android</span>
+        <span>Motor interno</span>
+        <span>Matriz geral</span>
+        <span>Timeline</span>
+        <span>Receitas de correção</span>
+        <span>PWA Android</span>
         <span>EQ</span>
         <span>Compressão</span>
-        <span>Reverb</span>
-        <span>Sibilância</span>
-        <span>Ações recomendadas</span>
       </div>
     </header>
 
     <main class="grid">
       <section class="panel">
-        <h2>Instalação no celular</h2>
-        <p>Quando este projeto estiver publicado em HTTPS, abra no Chrome do Android e use o botão abaixo.</p>
+        <h2>Instalação no Android</h2>
+        <p>Publique o projeto em HTTPS e abra no Chrome do Android para instalar como aplicativo.</p>
         <div class="button-row">
           <button id="installBtn" disabled>Instalar no Android</button>
           <button id="helpBtn">Ver instruções</button>
@@ -52,7 +53,7 @@
         <h2>Arquivo</h2>
         <label class="upload-box">
           <input type="file" id="fileInput" accept="audio/*">
-          <span>Carregar MP3, WAV ou áudio compatível</span>
+          <span>Carregar MP3, WAV ou áudio compatível com o navegador</span>
         </label>
 
         <div class="control-grid">
@@ -103,34 +104,26 @@
         </div>
       </section>
 
-      <section class="panel">
-        <h2>Gráfico tonal por bandas</h2>
-        <canvas id="bandChart" width="920" height="320"></canvas>
-      </section>
+      <section class="panel"><h2>Gráfico tonal por bandas</h2><canvas id="bandChart" width="920" height="320"></canvas></section>
+      <section class="panel"><h2>Curva de equalização detalhada</h2><canvas id="fftChart" width="920" height="320"></canvas></section>
+      <section class="panel"><h2>Mapa de efeitos e intensidade</h2><canvas id="effectChart" width="920" height="280"></canvas></section>
+      <section class="panel"><h2>Timeline de problemas por trecho</h2><canvas id="timelineChart" width="920" height="280"></canvas></section>
+      <section class="panel"><h2>Matriz geral de diagnóstico</h2><canvas id="matrixChart" width="920" height="320"></canvas></section>
+      <section class="panel"><h2>Diferença por banda vs referência interna</h2><canvas id="deltaChart" width="920" height="280"></canvas></section>
 
-      <section class="panel">
-        <h2>Curva de equalização detalhada</h2>
-        <canvas id="fftChart" width="920" height="320"></canvas>
-      </section>
-
-      <section class="panel">
-        <h2>Mapa de efeitos e intensidade</h2>
-        <canvas id="effectChart" width="920" height="280"></canvas>
-      </section>
-
-      <section class="panel">
-        <h2>Timeline de problemas por trecho</h2>
-        <canvas id="timelineChart" width="920" height="280"></canvas>
-      </section>
-
-      <section class="panel">
-        <h2>Diferença por banda vs referência interna</h2>
-        <canvas id="deltaChart" width="920" height="280"></canvas>
+      <section class="panel panel-wide">
+        <h2>Receitas de correção</h2>
+        <div id="recipeCards" class="action-cards"></div>
       </section>
 
       <section class="panel panel-wide">
         <h2>Ações recomendadas</h2>
         <div id="actionCards" class="action-cards"></div>
+      </section>
+
+      <section class="panel panel-wide">
+        <h2>Trechos críticos</h2>
+        <div id="timelineDetails" class="timeline-details"></div>
       </section>
 
       <section class="panel panel-wide">
